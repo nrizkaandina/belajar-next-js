@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser } from "@/context/UserContext";
+import { useFavorite } from "@/context/FavoriteContext";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -12,12 +13,14 @@ const links = [
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/profile", label: "Profile" },
+  { href: "/favorites", label: "Favorites"},
   { href: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const { name, submitted } = useUser();
+  const { favorites } = useFavorite();
 
   return (
     <header className="sticky top-4 z-50 mx-auto w-full max-w-4xl px-4">
@@ -46,18 +49,24 @@ export default function Navbar() {
                 )}
               >
                 {link.label}
+                {link.href === "/favorites" && favorites.length > 0 && (
+                  <span className="ml-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                    {favorites.length}
+                  </span>
+                )}
               </Link>
             );
           })}
         </div>
-        {submitted && <span>Hi, {name} 👋</span>}
-        <Link
-          href="/contact"
-          className={cn(buttonVariants({ size: "sm" }), "rounded-full")}
-        >
-        
-          Get in touch
-        </Link>
+        <div className="flex shrink-0 items-center gap-3 text-sm">
+          {submitted && <span>Hi, {name} 👋</span>}
+          <Link
+            href="/contact"
+            className={cn(buttonVariants({ size: "sm" }), "rounded-full")}
+          >
+            Get in touch
+          </Link>
+        </div>
       </nav>
     </header>
   );
