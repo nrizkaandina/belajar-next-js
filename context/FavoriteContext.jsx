@@ -1,41 +1,62 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-// 1. Buat Context
 const FavoriteContext = createContext();
 
-// 2. Buat Provider Component
 export function FavoriteProvider({ children }) {
   const [favorites, setFavorites] = useState([]);
+  
+  useEffect(() => {
+    fetch("/api/favorites")
+      .then((res) => res.json())
+      .then(setFavorites);
+  }, []);
 
-  // Fungsi untuk toggle (Add / Remove)
-  const toggleFavorite = (user) => {
-    setFavorites((prevFavorites) => {
-      // Cek apakah user sudah ada di daftar favorit
-      const isExist = prevFavorites.some((fav) => fav.id === user.id);
-      
-      if (isExist) {
-        // Hapus dari favorit jika sudah ada
-        return prevFavorites.filter((fav) => fav.id !== user.id);
-      } else {
-        // Tambahkan ke favorit jika belum ada
-        return [...prevFavorites, user];
-      }
+  async function addFavorite(user) {
+    const res = await fetch("/api/favorites", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
     });
-  };
 
-  // Fungsi untuk mengecek status favorit berdasarkan ID
-  const isFavorite = (userId) => {
-    return favorites.some((fav) => fav.id === userId);
-  };
+    if (res.ok) {
+      const saved = await res.json();
+      setFavorites((prev) => [...prev, saved]);
+    }
+  }
+
+  async function removeFavorite(userId) {
+    const res = await fetch(`/api/favorites/${userId}`, { method: "DELETE" });
+
+    if (res.ok) {
+      setFavorites((prev) => prev.filter((f) => f.id !== userId));
+    }
+  }
+
+  function isFavorite(userId) {
+    return favorites.some((f) => f.id === userId);
+  }
+
+  async function toggleFavorite(user) {
+    if (isFavorite(user.id)) {
+      await removeFavorite(user.id);
+    } else {
+      await addFavorite(user);
+    }
+  }
 
   return (
-    <FavoriteContext.Provider value={{ favorites, toggleFavorite, isFavorite }}>
+    <FavoriteContext.Provider value={{ favorites, isFavorite, toggleFavorite, addFavorite, removeFavorite }}>
       {children}
     </FavoriteContext.Provider>
   );
 }
 
-// 3. Buat Custom Hook agar lebih mudah dipanggil
-export const useFavorite = () => useContext(FavoriteContext);
+export function useFavorite() {
+  const context = useContext(FavoriteContext);
+  if (context === undefined) {
+    throw new Error("useFavorite harus dipakai di dalam <FavoriteProvider>");
+  }
+  return context;
+}

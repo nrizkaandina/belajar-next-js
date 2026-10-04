@@ -11,7 +11,7 @@ import { useFavorite } from "@/context/FavoriteContext";
 
 export default function UserCard({ user }) {
   
-  const {isFavorite, toggleFavorite} = useFavorite();
+  const {isFavorite, addFavorite, removeFavorite} = useFavorite();
 
   const favoriteStatus = isFavorite(user.id);
 
@@ -37,7 +37,7 @@ export default function UserCard({ user }) {
         <p className="text-sm text-muted-foreground">{user.email}</p>
 
         <p className="mt-1 text-sm text-muted-foreground">
-          {user.company.name}
+          {user?.company?.name}
         </p>
 
         <div className="mt-4 flex flex-col gap-2">
@@ -46,7 +46,13 @@ export default function UserCard({ user }) {
           <Button
             variant={favoriteStatus ? "secondary" : "outline"} 
             className="w-full rounded-full transition-all"
-            onClick={() => toggleFavorite(user)}
+            onClick={() => {
+              if (favoriteStatus) {
+                removeFavorite(user.id);
+              } else {
+                addFavorite(user);
+              }
+            }}
           >
             {favoriteStatus ? "♥ Remove from Favourite" : "♡ Add to Favourite"}
           </Button>
