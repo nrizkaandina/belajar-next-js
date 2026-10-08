@@ -5,7 +5,7 @@ export function middleware(request) {
   const isMaintenancePage = request.nextUrl.pathname === "/maintenance";
 
   if (isMaintenance && !isMaintenancePage) {
-    return NextResponse.redirect(new URL("/maintenance", request.url));
+//    return NextResponse.redirect(new URL("/maintenance", request.url));
   }
 
   return NextResponse.next();
