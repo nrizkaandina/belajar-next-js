@@ -1,6 +1,9 @@
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  const supabase = await createClient(); // instansiasi client async
   const { data, error } = await supabase.from("favorites").select("*");
 
   if (error) {
@@ -9,5 +12,3 @@ export async function GET() {
 
   return Response.json(data);
 }
-
-export const dynamic = 'force-dynamic';

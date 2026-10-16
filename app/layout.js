@@ -36,19 +36,14 @@ export default async function RootLayout({ children }) {
   } = await supabase.auth.getUser();
 
   return (
-    <html
-      lang="en"
-      className={`dark ${fontSans.variable}`}
-    >
+    <html lang="en" className={`dark ${fontSans.variable}`}>
       <body className="flex min-h-screen flex-col bg-background text-foreground antialiased">
         <AuthProvider user={user ? { id: user.id, email: user.email } : null}>
           <FavoriteProvider>
             <Navbar />
-
             <main className="flex-1">
               {children}
             </main>
-
             <Footer />
           </FavoriteProvider>
         </AuthProvider>

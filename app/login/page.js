@@ -1,4 +1,4 @@
-import { login, signup } from "./actions";
+import { login, signup } from "./action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,7 +19,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <Card className="mt-10 border border-white/10 bg-foreground/[0.03]">
+        <Card className="mt-10 border border-white/10 bg-foreground/3">
           <CardContent>
             <form className="space-y-4">
               <div className="space-y-1.5">

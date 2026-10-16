@@ -1,6 +1,7 @@
 "use client";
 
-import { useUser } from "@/context/UserContext";
+import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { Mail, MapPin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,16 +14,11 @@ const contactInfo = [
 ];
 
 export default function Contact() {
-   const {
-    name,
-    email,
-    message,
-    submitted,
-    setName,
-    setEmail,
-    setMessage,
-    setSubmitted,
-  } = useUser();
+  const { user } = useAuth();
+  const [name, setName ] = useState("");
+  const [email, setEmail ] = useState("");
+  const [message, setMessage] = useState("");
+  const [submitted, setSubmitted] = useState(false);
   
   async function handleSubmit(event) {
     event.preventDefault();
@@ -62,7 +58,7 @@ export default function Contact() {
             {contactInfo.map(({ icon: Icon, label, value }) => (
               <Card
                 key={label}
-                className="border border-white/10 bg-foreground/[0.03]"
+                className="border border-white/10 bg-foreground/3"
               >
                 <CardContent className="flex items-center gap-4">
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -77,7 +73,7 @@ export default function Contact() {
             ))}
           </div>
 
-          <Card className="border border-white/10 bg-foreground/[0.03] md:col-span-3">
+          <Card className="border border-white/10 bg-foreground/3 md:col-span-3">
             <CardContent>
               {submitted ? (
                 <div className="flex h-full min-h-64 flex-col items-center justify-center text-center">

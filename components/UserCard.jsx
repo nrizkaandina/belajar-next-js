@@ -15,6 +15,8 @@ export default function UserCard({ user }) {
 
   const favoriteStatus = isFavorite(user.id);
 
+  const userName = user?.name || "Unknown  User";
+
   const initials = user.name
     .split(" ")
     .map((part) => part[0])

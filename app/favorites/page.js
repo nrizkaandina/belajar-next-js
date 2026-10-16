@@ -30,10 +30,10 @@ export default function FavoritesPage() {
               <UserCard
                 key={favorite.id}
                 user={{
-                  id: favorite.app_users.id,
-                  name: favorite.app_users.name,
-                  email: favorite.app_users.email,
-                  company: { name: favorite.app_users.company_name },
+                  id: favorite.app_users?.id,
+                  name: favorite.app_users?.name,
+                  email: favorite.app_users?.email,
+                  company: { name: favorite.app_users?.company_name },
                 }}
               />
             ))}
