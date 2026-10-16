@@ -1,18 +1,22 @@
 'use server';
 
-import { messages } from '@/lib/db';
-import { revalidatePath } from 'next/cache';
+import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function deleteMessageAction(id) {
-  // Mencari index pesan berdasarkan id
-  const index = messages.findIndex((m) => String(m.id) === String(id));
+  const supabase = await createClient();
   
-  if (index !== -1) {
-    // Menghapus pesan dari array (dummy database)
-    messages.splice(index, 1);
-    
-    // Memanggil revalidatePath untuk membersihkan cache 
-    // dan me-refresh UI halaman secara otomatis
-    revalidatePath('/messages');
+  const { error } = await supabase
+    .from("messages")
+    .delete()
+    .eq("id", id);
+  
+  if (error) {
+    console.error("Gagal menghapus pesan:", error.message);
+    return { success: false, error: error.message };
   }
+    // Memberi tahu Next.js untuk menyegarkan tampilan halaman /messages secara instan
+    revalidatePath("/messages");
+    
+    return { success: true };
 }
