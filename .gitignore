@@ -39,3 +39,21 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Secrets
+.env
+.env.*
+!.env.example
+.env.local
+backend/.env
+
+
+# Python
+backend/.venv/
+__pycache__/
+*.py[cod]
+
+
+# Local vector index
+backend/data/chroma/
+

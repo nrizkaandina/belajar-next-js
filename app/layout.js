@@ -2,6 +2,7 @@ import "./globals.css";
 
 import localFont from "next/font/local";
 
+import ChatWidget from "@/components/ChatWidget";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { AuthProvider } from "@/context/AuthContext";
@@ -43,6 +44,7 @@ export default async function RootLayout({ children }) {
             <Navbar />
             <main className="flex-1">
               {children}
+              <ChatWidget />
             </main>
             <Footer />
           </FavoriteProvider>
